@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuhin Company - Water Order</title>
+</head>
+<body>
+
+<div id="WaterOrder" class="page">
+    <div class="main">
+        <h1 style="text-align: center; color: #004085; margin-bottom: 5px;">Tuhin Company</h1>
+        <p style="text-align: center; color: #555; margin-top: 0;">20L & 250ml Fresh Water Delivery</p>
+    </div>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #eef7ff;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { 
+            display: block; 
+            color: #0056b3; 
+            font-weight: 700; 
+            margin-bottom: 6px; 
+            font-size: 14px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #c2d9f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #fcfdfe;
+        }
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 10px;
+        }
+        .submit-btn:hover { background-color: #0056b3; box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
+        .submit-btn:disabled { background-color: #b0c4de; cursor: not-allowed; }
+
+        /* Success Message Overlay */
+        #success-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+        }
+        .success-icon { font-size: 60px; margin-bottom: 10px; }
+        .reset-link {
+            color: #007bff;
+            background: none;
+            border: 2px solid #007bff;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+
+    <div class="form-container">
+        <div id="success-overlay">
+            <div class="success-icon">💧</div>
+            <h2 style="color: #004085; margin: 0;">Order Placed!</h2>
+            <p style="color: #666;">Tuhin Company will deliver your water soon.</p>
+            <button class="reset-link" onclick="resetForm()">Order More</button>
+        </div>
+
+        <form id="waterForm">
+            <div class="form-group">
+                <label>Customer Name</label>
+                <input type="text" name="Name" placeholder="Full Name" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" name="Phone" placeholder="Mobile Number" required>
+            </div>
+
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea name="Address" rows="2" placeholder="House/Flat No, Landmark" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Number of 20L Jars</label>
+                <select name="Qty_20L">
+                    <option value="0">None</option>
+                    <option value="1">1 Bottle</option>
+                    <option value="2">2 Bottles</option>
+                    <option value="3">3 Bottles</option>
+                    <option value="4">4 Bottles</option>
+                    <option value="5">5 Bottles</option>
+                    <option value="6">6 Bottles</option>
+                    <option value="7">7 Bottles</option>
+                    <option value="8">8 Bottles</option>
+                    <option value="9">9 Bottles</option>
+                    <option value="10">10 Bottles</option>
+                    <option value="10+">More than 10</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Number of 250ml Cases</label>
+                <select name="Qty_250ml">
+                    <option value="0">None</option>
+                    <option value="1">1 Case</option>
+                    <option value="2">2 Cases</option>
+                    <option value="3">3 Cases</option>
+                    <option value="4">4 Cases</option>
+                    <option value="5">5 Cases</option>
+                    <option value="6">6 Cases</option>
+                    <option value="7">7 Cases</option>
+                    <option value="8">8 Cases</option>
+                    <option value="9">9 Cases</option>
+                    <option value="10">10 Cases</option>
+                    <option value="10+">More than 10</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Any Special Request?</label>
+                <input type="text" name="Message" placeholder="e.g. Urgent delivery">
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">Place Delivery Order</button>
+        </form>
+    </div>
+</div>
+
+<script>
+  // Script URL for your Google Sheets integration
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwB3zWASb77W2f1svg4q8-3WN2LYKF3qB6tUI2Wgn4SQ8Zy7qSJu0wr0iv4Y9ycLF9Qdw/exec';
+  const form = document.getElementById('waterForm');
+  const btn = document.getElementById('submitBtn');
+  const overlay = document.getElementById('success-overlay');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    // Check if anything is actually ordered
+    if (form.Qty_20L.value === "0" && form.Qty_250ml.value === "0") {
+        alert("Please select at least 1 jar or 1 case to proceed.");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = "Processing Order...";
+
+    const formData = new URLSearchParams(new FormData(form)).toString();
+
+    fetch(scriptURL, { 
+        method: 'POST', 
+        body: formData,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    .then(response => {
+        overlay.style.display = 'flex';
+        form.style.visibility = 'hidden';
+    })
+    .catch(error => {
+        alert("Network Error! Please try again.");
+        btn.disabled = false;
+        btn.innerHTML = "Place Delivery Order";
+    });
+  });
+
+  function resetForm() {
+    form.reset();
+    form.style.visibility = 'visible';
+    overlay.style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = "Place Delivery Order";
+  }
+</script>
+
+</body>
+</html>
